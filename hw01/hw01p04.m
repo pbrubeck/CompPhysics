@@ -1,3 +1,3 @@
-function [] = hw01p04(key, str)
-disp(char(str-key));
+function [out] = hw01p04(key, str)
+out=char(str-key);
 end
