@@ -33,10 +33,11 @@ for i=1:length(ns)
     e4(i)=norm(yy-y4,'inf');
     e6(i)=norm(yy-y6,'inf');
 end
-figure(1); clf;
-loglog(ns,[e2;e4;e6]); hold on;
-legs=cellfun(@(x)({sprintf('O(h^%d)',x)}), num2cell([2,4,6]));
-legend(legs);
-xlabel('N');
-ylabel('error');
+loglog(ns,[e2;e4;e6]);
+set(gca,'XMinorTick','off');
+set(gca, 'XTick', ns);
+set(gca, 'XTickLabel', num2str(log2(ns(:)), '2^{%d}'));
+xlabel('N'); ylabel('error');
+legend(num2str([2;4;6],'O(h^%d)'));
+print -depsc act02g01;
 end

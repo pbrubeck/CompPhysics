@@ -15,11 +15,14 @@ H=toeplitz(r,r)+diag(V(2:end-1));
 [S,lam]=eigs(H,m,'sm');
 [lam, order]=sort(diag(lam));
 S=S(:,order);
-figure(1); clf;
 Psi=zeros(n+2,m);
-Psi(2:end-1,:)=S;
+Psi(2:end-1,:)=sqrt(1/h)*bsxfun(@times, S, -sign(S(end,:)));
 plot(x,Psi);
-legs=cellfun(@(x)({sprintf('\\lambda=%f',x)}), num2cell(lam(1:m)));
-legend(legs);
+
+legs=[num2str((1:m)','\\lambda_{%d}'), num2str(lam(1:m),'=%f')];
+legend(legs); 
+xlabel('$x$','Interpreter','latex');
+ylabel('$\Psi(x)$','Interpreter','latex');
+print -depsc act02g02;
 end
 
