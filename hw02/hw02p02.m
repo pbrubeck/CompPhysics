@@ -1,4 +1,5 @@
 function [E, rbohr] = hw02p02(N, k)
+% Schrodinger Equation for the Hydrogen atom
 E0=54.4228;  % Electronvolts
 r0=0.264589; % Angstroms
 
@@ -12,28 +13,33 @@ w=r0*sec(t).^2.*w(:);
 w=w(1:N);
 
 % Assume even parity
-Dtt=diag(cos(t)).^2*D*diag(sin(t).^2)*D;
-Dtt=Dtt(1:N,1:N)+Dtt(1:N,end:-1:N+1);
+T=-diag(cos(t)).^2*D*diag(sin(t).^2)*D;
+T=T(1:N,1:N)+T(1:N,end:-1:N+1);
 t=t(1:N);
 r=r0*tan(t);
 
 % Solve eigensystem
-H=-Dtt-diag(tan(t));
+V=-diag(tan(t));
+H=T+V;
 B=diag(tan(t).^2);
 [S,E]=eig(H(2:end,2:end), B(2:end,2:end));
-[E,order]=sort(diag(E));
+[E,id]=sort(diag(E));
 E=E0*E(1:k);
 
 % Normalize eigenfunction
 Psi=zeros(N,k);
-Psi(2:end,:)=S(:,order(1:k));
+Psi(2:end,:)=S(:,id(1:k));
 Psi=Psi/(diag(sqrt(diag(Psi'*diag(w)*Psi))));
 Psi=bsxfun(@times, Psi, sign(Psi(end,:)));
+
+% Calculate Bohr radius
+rbohr=Psi(:,1)'*diag(2*r.*w)*Psi(:,1);
 
 % Plot
 plot(r, Psi);
 xlim([0,20]);
-
-% Calculate Bohr radius
-rbohr=Psi(:,1)'*diag(2*r.*w)*Psi(:,1);
+legend([num2str((1:k)','E_{%d}'), num2str(E,'=%f')]);
+xlabel('$r$','Interpreter','latex');
+ylabel('$\Psi_n(r)$','Interpreter','latex');
+print -depsc p02g01;
 end
