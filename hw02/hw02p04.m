@@ -19,7 +19,7 @@ u=zeros(N,length(k));
 u(2:end-1,:)=V(:, id);
 u0=interp1(x,u,0,'spline');
 u=bsxfun(@times, u, airy(0)./u0);
-r=u'*diag(w)*u;
+r=u'*diag(w(:).*x)*u;
 
 % Plot
 plot(x, u);

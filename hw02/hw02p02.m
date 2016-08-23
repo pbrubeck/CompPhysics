@@ -1,41 +1,45 @@
 function [E, rbohr] = hw02p02(N, k)
 % Schrodinger Equation for the Hydrogen atom
-E0=54.4228;  % Electronvolts
-r0=0.264589; % Angstroms
+% Hatree units
+E0=27.21138505;   % Electronvolts
+r0=0.52917721067; % Angstroms
 
 % Differentiation matrix
-[D,t]=chebD(2*N);
-t=pi/2*t; D=2/pi*D;
+[Dt,t]=chebD(N);
+t=pi/2*(t+1)/2; Dt=4/pi*Dt;
+x=tan(t);
 
 % Integration quadrature
-[~,w]=ClenshawCurtis(-1, 1, 2*N-1);
+[~,w]=ClenshawCurtis(0, pi/2, N-1);
 w=r0*sec(t).^2.*w(:);
-w=w(1:N);
-
-% Assume even parity
-T=-diag(cos(t)).^2*D*diag(sin(t).^2)*D;
-T=T(1:N,1:N)+T(1:N,end:-1:N+1);
-t=t(1:N);
-r=r0*tan(t);
+r=r0*x;
 
 % Solve eigensystem
-V=-diag(tan(t));
+B=diag(x);
+Dx=diag(cos(t).^2)*Dt;
+T=-1/2*B*Dx^2;
+V=-eye(N);
 H=T+V;
-B=diag(tan(t).^2);
-[S,E]=eig(H(2:end,2:end), B(2:end,2:end));
+[S,E]=eig(H(2:end-1,2:end-1), B(2:end-1,2:end-1));
 [E,id]=sort(diag(E));
 E=E0*E(1:k);
 
 % Normalize eigenfunction
-Psi=zeros(N,k);
-Psi(2:end,:)=S(:,id(1:k));
-Psi=Psi/(diag(sqrt(diag(Psi'*diag(w)*Psi))));
-Psi=bsxfun(@times, Psi, sign(Psi(end,:)));
+U=zeros(N,k);
+U(2:end-1,:)=S(:,id(1:k));
+U=U/diag(sqrt(diag(U'*diag(w)*U)));
+U=bsxfun(@times, U, sign(U(end-1,:)));
 
 % Calculate Bohr radius
-rbohr=Psi(:,1)'*diag(2*r.*w)*Psi(:,1);
+u=U(:,1);
+[umax, imax]=max(abs(u).^2);
+rq=linspace(r(imax-1), r(imax+1), 1024);
+uq=interp1(r,u,rq,'spline');
+[umax, imax]=max(abs(uq).^2);
+rbohr=rq(imax);
 
 % Plot
+Psi=bsxfun(@rdivide, U, r);
 plot(r, Psi);
 xlim([0,20]);
 legend([num2str((1:k)','E_{%d}'), num2str(E,'=%f')]);

@@ -21,7 +21,7 @@ E=E(1:k);
 % Normalize eigenfunction
 Psi=zeros(N,k);
 Psi(2:end-1,:)=S(:,id(1:k));
-Psi=Psi/(diag(sqrt(diag(Psi'*diag(w)*Psi))));
+Psi=Psi/diag(sqrt(diag(Psi'*diag(w)*Psi)));
 Psi=bsxfun(@times, Psi, sign(Psi(N/2,:)));
 
 % Error
@@ -32,4 +32,3 @@ plot(x, Psi);
 legend([num2str((1:k)','E_{%d}'), num2str(E,'=%f')]);
 print -depsc p03g01;
 end
-
