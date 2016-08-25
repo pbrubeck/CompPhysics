@@ -42,7 +42,7 @@ rbohr=rq(imax);
 Psi=bsxfun(@rdivide, U, r);
 plot(r, Psi);
 xlim([0,20]);
-legend([num2str((1:k)','E_{%d}'), num2str(E,'=%f')]);
+legend([num2str((0:k-1)','E_{%d}'), num2str(E,'=%f')]);
 xlabel('$r$','Interpreter','latex');
 ylabel('$\Psi_n(r)$','Interpreter','latex');
 print -depsc p02g01;

@@ -29,6 +29,6 @@ r=E+(-k:-1)'.^2/2;
 
 % Plot
 plot(x, Psi);
-legend([num2str((1:k)','E_{%d}'), num2str(E,'=%f')]);
+legend([num2str((0:k-1)','E_{%d}'), num2str(E,'=%f')]);
 print -depsc p03g01;
 end
