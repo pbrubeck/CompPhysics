@@ -1,5 +1,6 @@
 function [p1,p2] = hw04p04(N)
 % Monty Hall problem simulation
+% N = number of trials
 X=mod(round(3*randlcg(N,2)),3); 
 prize=X(:,1); % Prize door
 first=X(:,2); % Player's first selection

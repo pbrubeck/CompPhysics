@@ -1,6 +1,6 @@
 function [X] = randlcg(varargin)
 % Linear Congruential Generator.
-% Returns a matrix of uniformly distributed random numbers between 0 and
+% Returns a matrix of uniformly distributed random numbers between 0 and 1
 % X = randlcg(sz1,...,szN)
 
 % Numerical Recipes parameters
