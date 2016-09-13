@@ -9,5 +9,6 @@ set(gca,'XMinorTick','off');
 set(gca, 'XTick', ns);
 set(gca, 'XTickLabel', num2str(log2(ns(:)), '2^{%d}'));
 xlabel('N'); title('error');
+print -depsc act05g02;
 end
 

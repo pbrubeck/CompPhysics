@@ -13,5 +13,7 @@ n=sum(bsxfun(@ge, X, x));                % Simulation result
 p=1-(0.5+erf((x-mu)/(sqrt(2)*sigma))/2); % Probabilistic result
 err=abs(1-N*p./n);
 
-fprintf('%d  people have IQ > %d \nRelative error = %f\n', n, x, err);
+fprintf('%d  people have IQ > %d\n', n, x);
+fprintf('Relative error = %f\n', err);
+fprintf('The highest IQ was %f\n', max(X));
 end

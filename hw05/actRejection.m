@@ -20,6 +20,7 @@ while length(Z)<N
 end
 Z=Z(1:N);
 histogram(Z,60);
+print -depsc act05g01;
 fprintf('mean = %f\nstd =%f\n', mean(Z), std(Z));
 end
 

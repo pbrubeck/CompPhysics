@@ -14,10 +14,10 @@ for n=ns
 end
 approx=2./p; % p should be approximately 2/pi
 err=abs(1-approx/pi);
-loglog(ns, err);
+loglog(ns, err, 'LineWidth', 3);
 set(gca,'XMinorTick','off');
 set(gca, 'XTick', ns);
 set(gca, 'XTickLabel', num2str(log2(ns(:)), '2^{%d}'));
-xlabel('N'); ylabel('error');
+xlabel('N'); title('Relative error');
 print -depsc p01g01;
 end
