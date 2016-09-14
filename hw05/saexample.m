@@ -15,8 +15,7 @@ y=(1.5-exp(-(x-exp(1)/pi).^2)).*(exp(1)+.25*cos(x*3));
 x0=rand(1)*(b-a)+a;
 costo=inline('(1.5-exp(-(x-exp(1)/pi).^2)).*(exp(1)+.25*cos(x*3))');
 
-fin=10000;
-%fin=200;
+fin=1000;
 equil=[];
 
 for iter=2:1:fin
@@ -47,15 +46,13 @@ for iter=2:1:fin
             x_aux=x0;
  
         else
-            
             x0=x0;
             x_aux=x0;
-
         end
         x0_aux=x0;
         
            plot(x,y,x0,costo(x0),'*');
-           pause(.001);
+           drawnow;
 %                    iter
     end
 equil=[equil,cambio];
