@@ -1,26 +1,27 @@
 function [sup,its] = maxone(nbits, N)
+binmax=bitshift(1,nbits)-1;
 % Generate random population
 pop=randi(2^nbits,N,1)-1;
 
 % Fitness function
-f=sum(de2bi(pop),2);
-[fsup,id]=max(f);
+fit=sum(de2bi(pop),2);
+[fsup,id]=max(fit);
 sup=pop(id);
 
 its=0;
 fail=0;
-while fail<10
+while fail<1000
     % Selection
-    p=cumsum(f/sum(f));
+    p=cumsum(fit/sum(fit));
     [~,j]=max(bsxfun(@ge, p, rand(1,N)));
-    pop=pop(j);
+    pop=pop(j,:);
     
     % Reproduction
-    par1=pop(1:2:end);
-    par2=pop(2:2:end);
+    par1=pop(1:2:end,:);
+    par2=pop(2:2:end,:);
     msk1=2.^randi(nbits,size(par1))-1;
-    msk1(rand(size(msk1))>0.9)=2^nbits-1;
-    msk2=(2^nbits-1)-msk1;
+    msk1(rand(size(msk1))>0.5)=binmax;
+    msk2=bitxor(msk1, binmax);
     pop(1:2:end)=bitor(bitand(par1, msk1), bitand(par2, msk2));
     pop(2:2:end)=bitor(bitand(par2, msk1), bitand(par1, msk2));
 
@@ -29,12 +30,12 @@ while fail<10
     pop=bitxor(pop, msk3);
     
     % Determine who has been the fittest
-    f=sum(de2bi(pop),2);
-    [fmax,id]=max(f);
+    fit=sum(de2bi(pop),2);
+    [fmax,id]=max(fit);
     if(fmax>=fsup)
         fsup=fmax;
         sup=pop(id);
-        fail=0;
+        fail=(fmax==fsup)*fail;
     else
         fail=fail+1;
     end
