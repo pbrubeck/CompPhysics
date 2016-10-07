@@ -12,7 +12,7 @@ B2=B1+box;
 opts=gaoptimset();
 opts=gaoptimset(opts,'Display', 'off');
 opts=gaoptimset(opts,'PlotFcns', @plotfunc);
-opts=gaoptimset(opts,'PlotInterval', 1);
+opts=gaoptimset(opts,'PlotInterval', 20);
 [x,f]=ga(@fitfunc,2*n,[],[],[],[],zeros(1,2*n),ones(1,2*n),[],opts);
 
 if f<100
@@ -72,19 +72,19 @@ end
 function [state]=plotfunc(options,state,flag)
 [~,imin]=min(state.Score);
 simpleplot(state.Population(imin,:));
-gen=state.Generation;
-%print(sprintf('gen%03d',gen),'-depsc');
 end
 
 function []=simpleplot(t)
 global z0 zf LB UB B1 box;
 dz=mapDisplacements(t);
 z=[cumsum([z0, dz]), zf];
-plot(z,'-or', 'linewidth', 2); xlim([LB, UB]); ylim([LB, UB]);
-hold on;
+clf; hold on;
 for k=1:length(B1)
-    rectangle('EdgeColor', [0,0,1], 'linewidth', 1, ...
+    rectangle('FaceColor', [0,1,1], ...
     'Position', [real(B1(k)), imag(B1(k)), real(box(k)), imag(box(k))]);
 end
+plot(z,'-or', 'linewidth', 2); xlim([LB, UB]); ylim([LB, UB]);
 hold off;
+gen=state.Generation;
+print(sprintf('gen%3.0f',gen),'-depsc');
 end
