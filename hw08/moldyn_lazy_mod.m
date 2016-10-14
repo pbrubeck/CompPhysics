@@ -1,8 +1,6 @@
-function [Ti,Ei,ti] = moldyn(N,d)
+function [Ti,Ei,ti] = moldyn_lazy_mod(N,d)
 % N number of particles
 % d number of dimensions
-
-filename = sprintf('moldyn%d.gif', N);
 
 L=4*N^(1/d);    % Lenght of container
 T0=0;           % Velocity variance
@@ -12,6 +10,13 @@ tf=10;          % Final time
 fr=10;          % Framerate
 nframes=1+ceil(tf*fr);
 
+sim=0;
+Alarm=datetime(2016,10,14,6,30,0);
+%Use clock to run code during the night and wake me up  
+%for 7am class with a Gong, cuz I'm a lazy ass modafaca.    
+%%%%Gong in line 89, will sound between 6:20 and 7:00%%%
+while datetime(clock)<=Alarm  
+sim=sim+1;
 % Initial configuration
 E=1;
 while E>=0
@@ -39,9 +44,10 @@ daspect([1,1,1]);
 
 t=0;
 title(sprintf('T=%.2f, E=%.2f, t=%.2f',T,E,t));
-print('hw08g01','-dpng');
+%print('hw08g01','-dpng');
 
 % Create .gif file
+filename = sprintf('moldyn%03d_N%d_E%.f.gif', sim, N, -E);
 im=frame2im(getframe(gcf));
 [imind,cm]=rgb2ind(im,256);
 imwrite(imind,cm,filename,'gif','DelayTime',0,'Loopcount',inf);
@@ -79,13 +85,15 @@ for i=2:nframes
     imwrite(imind,cm,filename,'gif','DelayTime',0,'WriteMode','append');
 end
 
-print('hw08g02','-dpng');
+%print('hw08g02','-dpng');
 plot(ti,Ti,'Linewidth',2);
 title('Average temperature');
 xlabel('time');
-print('hw08g03','-depsc');
+%print('hw08g03','-depsc');
 end
-
+load gong
+sound(y,Fs)
+end
 function x1=box(x0,L)
 [dx,dy,dz]=ndgrid([-L,0,L]);
 A=kron([dx(:),dy(:),dz(:)],ones(size(x0,1),1));
