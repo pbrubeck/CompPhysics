@@ -1,17 +1,26 @@
 function [] = pacman( N )
-tf=100;
-dt=0.05;
+tf=40;
+dt=1;
+nframes=ceil(tf/dt);
+
 a=-10; b=10;
-w=1i*[0:N/2-1, 0, -N/2+1:-1]';
-q=exp(-2*pi/(b-a)*dt*w); % Fourier propagator
+w=[0:N/2-1, 0, -N/2+1:-1]';
+q=exp(-2i*pi/(b-a)*dt*w); % Fourier propagator
 x=a+(b-a)/N*(1:N)';
 u=exp(-4*x.^2);
-h=plot(x,u);
-xlim([a,b]); ylim([0,1]);
-for t=0:dt:tf
+uu=zeros(nframes+1,N);
+uu(1,:)=u;
+for i=1:nframes
     u=real(ifft(q.*fft(u)));
-    set(h,'YData',u);
-    drawnow;
+    uu(i+1,:)=u;
 end
+
+waterfall(x,0:dt:tf,uu); 
+colormap([0 0 0]); view(10,70); grid off;
+tex{1}=xlabel('$x$');
+tex{2}=ylabel('$t$');
+cellfun(@(x) set(x,'Interpreter','latex'), tex);
+cellfun(@(x) set(x,'fontsize',14), tex);
+print('hw09p02g01','-depsc');
 end
 
