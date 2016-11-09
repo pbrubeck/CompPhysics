@@ -1,4 +1,4 @@
-function [] = cobwebs(f, x0, n)
+function [] = cobweb(f, x0, n)
 % Fixed point x=f(x)
 for i=1:n
     y0=f(x0);
