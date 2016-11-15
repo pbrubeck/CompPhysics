@@ -21,4 +21,3 @@ scatter(x(1,:), x(2,:), '.', ...
 daspect([1,1,1]); axis off;
 print('fern', '-depsc');
 end
-
